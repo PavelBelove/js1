@@ -1,0 +1,17 @@
+.container   {
+    width: 50%;
+    margin: 0 auto;
+    b
+}
+
+h1 {
+    text-align: center;
+    font-size: 4rem;
+}
+ol {
+    font-size: 1.5rem;
+}
+p {
+font-style: italic;
+font-size: 1.5rem;
+}
