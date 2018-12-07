@@ -1,0 +1,48 @@
+.board {
+    max-width: 54rem;
+    margin: 0 auto;
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr;
+    grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 1fr;
+
+}
+
+span {
+    color: #140F0B;
+}
+
+.column_brim {
+    width: 3rem;
+    height: 6rem;
+    background-color: #8A6642;
+    text-align: center;
+    line-height: 6rem;
+}
+
+.row_brim {
+    width: 6rem;
+    height: 3rem;
+    background-color: #8A6642;
+    text-align: center;
+    line-height: 3rem;
+}
+
+.angel_brim {
+    width: 3rem;
+    height: 3rem;
+    background-color: #8A6642;
+}
+.reverse{
+    transform: rotate(180deg);
+}
+.cell{
+    width: 6rem;
+    height: 6rem; 
+}
+.black{
+    background-color: #140F0B;    
+}
+.white{
+    background-color: #C19A6B	;
+}
