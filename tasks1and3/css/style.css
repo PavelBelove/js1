@@ -1,0 +1,68 @@
+.container {
+    width: 60%;
+    margin: 0 auto;
+
+}
+
+.gallery {
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem;
+}
+
+.gallery img {}
+
+.gallery img:hover {
+    -webkit-box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.75);
+}
+
+
+.slider {
+    position: relative;
+    width: 100%;
+
+}
+
+.slider img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 1s;
+
+}
+
+#left,
+#right {
+    width: 4rem;
+    height: 7rem;
+    position: absolute;
+    z-index: 10;
+    background-size: contain;
+}
+
+#left {
+
+    background-image: url(../img/btn/left.svg);
+    left: 4rem;
+    top: 15rem;
+}
+
+#right {
+
+    background-image: url(../img/btn/right.svg);
+    right: 4rem;
+    top: 15rem;
+}
+
+#left:hover {
+
+    background-image: url(../img/btn/left-hover.svg);
+}
+
+#right:hover {
+
+    background-image: url(../img/btn/right-hover.svg);
+}
