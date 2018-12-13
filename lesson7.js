@@ -10,6 +10,8 @@ var food_timer; // Таймер для еды
 var score = 0; // Результат
 var countStep = 0; // Одометр змейки. Инкремент на каждый шаг.
 var checkStep = 0; //  Сюда присваивается значение одометра при каждом повороте. 
+
+
 /*===================================================================================
 by Pavel Belov
 Коментарий по исправлению бага с разворотом. Кратко суть бага: Если быстро нажать две стрелки, до того, как змейка сделает шаг, 
@@ -85,6 +87,7 @@ function startGame() {
 
     snake_timer = setInterval(move, SNAKE_SPEED);//каждые 200мс запускаем функцию move
     setTimeout(createFood, 5000);
+    setInterval(createBomb, 2000); // в реальной игре нужно замедлить появление препятствий.
 }
 
 /**
@@ -125,23 +128,28 @@ function move() {
 
     // Определяем новую точку
     if (direction == 'x-') {
+        if (coord_x == 0) { coord_x = FIELD_SIZE_X};
         new_unit = document.getElementsByClassName('cell-' + (coord_y) + '-' + (coord_x - 1))[0];
     }
     else if (direction == 'x+') {
+        if (coord_x == FIELD_SIZE_X-1) { coord_x = -1}; //-1 потому, что сдел. шагом инкрементируем.
         new_unit = document.getElementsByClassName('cell-' + (coord_y) + '-' + (coord_x + 1))[0];
     }
     else if (direction == 'y+') {
+        if (coord_y == 0) { coord_y = FIELD_SIZE_Y};
         new_unit = document.getElementsByClassName('cell-' + (coord_y - 1) + '-' + (coord_x))[0];
     }
     else if (direction == 'y-') {
+        if (coord_y == FIELD_SIZE_Y-1) { coord_y = -1};
         new_unit = document.getElementsByClassName('cell-' + (coord_y + 1) + '-' + (coord_x))[0];
     }
 
     // Проверки
     // 1) new_unit не часть змейки
     // 2) Змейка не ушла за границу поля
+     
     //console.log(new_unit);
-    if (!isSnakeUnit(new_unit) && new_unit !== undefined) {
+    if (!isSnakeUnit(new_unit)) {
         // Добавление новой части змейки
         new_unit.setAttribute('class', new_unit.getAttribute('class') + ' snake-unit');
         snake.push(new_unit);
@@ -158,6 +166,10 @@ function move() {
     }
     else {
         finishTheGame();
+    }
+    //Проверка на бомбу
+    if (haveBomb(new_unit)) {
+        finishTheGame()
     }
     countStep++
 }
@@ -190,7 +202,7 @@ function haveFood(unit) {
         check = true;
         createFood();
 
-        score++;
+        realTimeCounter();
     }
     return check;
 }
@@ -262,7 +274,7 @@ function changeDirection(e) {
 function finishTheGame() {
     gameIsRunning = false;
     clearInterval(snake_timer);
-    alert('Вы проиграли! Ваш результат: ' + score.toString());
+    alert('Вы проиграли! Ваш результат: ' + score.toString() + '\n Змейка проехала ' + countStep + ' ячеек.' );
     location.reload();
 }
 
@@ -272,6 +284,61 @@ function finishTheGame() {
 function refreshGame() {
     location.reload();
 }
+
+
+/*====================================================*/
+// Счетчик в реальном времени
+function realTimeCounter(){
+    let tally = document.querySelector("#tally");
+    tally.innerText = "Ништяков схрумкано: " + ++score;
+}
+
+
+//  Генератор бомб. 
+function createBomb() {
+    
+        var bomb_x = Math.floor(Math.random() * FIELD_SIZE_X);
+        var bomb_y = Math.floor(Math.random() * FIELD_SIZE_Y);
+
+        var bomb_cell = document.getElementsByClassName('cell-' + bomb_y + '-' + bomb_x)[0];
+       
+        
+        var bomb_cell_classes = bomb_cell.getAttribute('class').split(' ');
+
+        // проверка на змейку
+        if (!bomb_cell_classes.includes('snake-unit')) {
+            var classes = '';
+            for (var i = 0; i < bomb_cell_classes.length; i++) {
+                classes += bomb_cell_classes[i] + ' ';
+            }
+            //console.log('class', classes + 'bomb-unit');
+            bomb_cell.setAttribute('class', classes + 'bomb-unit');
+          // таймер исчезновения бомбы
+            var classes = bomb_cell.getAttribute('class').split(' ');
+			
+            // удаляем бомбу
+            setTimeout(function(){bomb_cell.setAttribute('class', classes[0] + ' ' + classes[1])}, 15000);
+          
+        
+    }
+}
+
+/**
+ * проверка на бомбу
+ * @param unit
+ * @returns {boolean}
+ */
+function haveBomb(unit) {
+    
+    var unit_classes = unit.getAttribute('class').split(' ');
+
+    // Если бомба
+    if (unit_classes.includes('bomb-unit')) {
+        return true;        
+    }
+    
+}
+/*===================================================*/
 
 // Инициализация
 window.onload = init;
